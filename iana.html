@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Verdadeiro ou Falso</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background-color: #f0f8ff;
+      text-align: center;
+      padding: 20px;
+    }
+    .quiz-container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .question {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    .buttons button {
+      background-color: #4CAF50;
+      border: none;
+      color: white;
+      padding: 15px 30px;
+      margin: 10px;
+      font-size: 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .buttons button:hover {
+      background-color: #45a049;
+    }
+    #result {
+      font-size: 22px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="quiz-container">
+  <h1>Quiz Verdadeiro ou Falso</h1>
+  <div id="question" class="question"></div>
+  <div class="buttons">
+    <button onclick="responder(true)">Verdadeiro</button>
+    <button onclick="responder(false)">Falso</button>
+  </div>
+  <div id="result"></div>
+</div>
+
+<script>
+const questoes = [
+  { pergunta: "O coração fica dentro da barriga.", resposta: false },
+  { pergunta: "Nós temos cinco sentidos: visão, audição, tato, olfato e paladar.", resposta: true },
+  { pergunta: "O cérebro controla todo o nosso corpo.", resposta: true },
+  { pergunta: "Os dentes são feitos de osso.", resposta: false },
+  { pergunta: "A pele é o maior órgão do corpo humano.", resposta: true },
+  { pergunta: "A língua serve apenas para falar.", resposta: false },
+  { pergunta: "Quando sentimos dor, é porque nosso corpo está nos avisando de algo errado.", resposta: true },
+  { pergunta: "A coluna vertebral é feita de um único osso grande.", resposta: false },
+  { pergunta: "Os pulmões ajudam a gente a respirar.", resposta: true },
+  { pergunta: "O sangue é azul dentro do corpo.", resposta: false },
+  { pergunta: "O nariz só serve para respirar.", resposta: false },
+  { pergunta: "A mão tem cinco dedos.", resposta: true },
+  { pergunta: "O estômago é onde a comida vira energia.", resposta: true },
+  { pergunta: "Só o adulto precisa cuidar dos dentes, criança não.", resposta: false },
+  { pergunta: "As orelhas servem apenas para usar brincos.", resposta: false },
+  { pergunta: "O esqueleto protege os nossos órgãos.", resposta: true },
+  { pergunta: "A gente precisa beber água para viver.", resposta: true },
+  { pergunta: "Quando machucamos a pele, ela nunca se cura sozinha.", resposta: false },
+  { pergunta: "Cabelos e unhas continuam crescendo depois da gente cortar.", resposta: true },
+  { pergunta: "O coração é do tamanho de uma bola de futebol.", resposta: false }
+];
+
+let indiceAtual = 0;
+
+function falar(texto) {
+  const utterance = new SpeechSynthesisUtterance(texto);
+  utterance.lang = 'pt-BR';
+  utterance.rate = 0.9; // velocidade (0.1 a 10) - pode ajustar para mais lento se quiser
+  utterance.pitch = 1; // tom da voz
+  speechSynthesis.speak(utterance);
+}
+
+function mostrarQuestao() {
+  const perguntaAtual = questoes[indiceAtual].pergunta;
+  document.getElementById("question").textContent = perguntaAtual;
+  document.getElementById("result").textContent = "";
+  falar(perguntaAtual); // Fala a pergunta para a criança
+}
+
+function responder(valor) {
+  const correto = questoes[indiceAtual].resposta;
+  const result = document.getElementById("result");
+  
+  if (valor === correto) {
+    result.textContent = "Parabéns! Você acertou! ✨";
+    result.style.color = "green";
+  } else {
+    result.textContent = "Ops! Resposta errada. 😞";
+    result.style.color = "red";
+  }
+  
+  setTimeout(() => {
+    indiceAtual++;
+    if (indiceAtual < questoes.length) {
+      mostrarQuestao();
+    } else {
+      document.getElementById("question").textContent = "Fim do Quiz! 🎉";
+      document.querySelector(".buttons").style.display = "none";
+      falar("Parabéns! Você terminou o quiz!");
+    }
+  }, 1500);
+}
+
+// Começar o quiz
+mostrarQuestao();
+</script>
+
+</body>
+</html>
